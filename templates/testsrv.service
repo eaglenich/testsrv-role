@@ -1,0 +1,13 @@
+[Unit]
+Description=testsrv microservice
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=testsrv
+ExecStart=/home/testsrv/testsrv
+
+[Install]
+WantedBy=multi-user.target

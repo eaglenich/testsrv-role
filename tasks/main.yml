@@ -1,0 +1,35 @@
+---
+# tasks file for testsrv-role
+
+- name: create group for testsrv
+  group:
+    name: testsrv
+    state: present
+
+- name: create user for testsrv
+  user:
+    name: testsrv
+    create_home: yes
+    group: testsrv
+    state: present
+
+- name: get testsrv binary
+  get_url:
+    dest: /home/testsrv
+    url: https://github.com/imorph/testsrv/releases/download/{{ version }}/testsrv-{{ version }}-linux-amd64.tar.gz
+
+- name: unpack testsrv binary
+  unarchive: src=/home/testsrv/testsrv-{{ version }}-linux-amd64.tar.gz
+    dest=/home/testsrv remote_src=true
+
+- name: deploy testsrv systemd unit file
+  copy:
+    src: templates/testsrv.service
+    dest: /usr/lib/systemd/system/testrsv.service
+
+- name: enable and start testsrv
+  systemd:
+    name: testrsv
+    enabled: true
+    daemon_reload: yes
+    state: started
