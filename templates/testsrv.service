@@ -1,13 +1,13 @@
 [Unit]
-Description=testsrv microservice
+Description={{ service_name }} microservice
 After=network.target
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=1
-User=testsrv
-ExecStart=/home/testsrv/testsrv
+User={{ service_name }}
+ExecStart=/home/{{ user_name }}/{{ service_name }}
 
 [Install]
 WantedBy=multi-user.target

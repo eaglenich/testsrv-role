@@ -1,35 +1,37 @@
 ---
 # tasks file for testsrv-role
 
-- name: create group for testsrv
+- name: create group for {{ service_name }}
   group:
-    name: testsrv
+    name: "{{ group_name }}"
     state: present
 
-- name: create user for testsrv
+- name: create user for {{ service_name }}
   user:
-    name: testsrv
+    name: "{{ user_name }}"
     create_home: yes
-    group: testsrv
+    group: "{{ group_name }}"
     state: present
 
-- name: get testsrv binary
+- name: get {{ service_name }} binary
   get_url:
-    dest: /home/testsrv
-    url: https://github.com/imorph/testsrv/releases/download/{{ version }}/testsrv-{{ version }}-linux-amd64.tar.gz
+    dest: "/home/{{ user_name }}"
+    url: "https://github.com/imorph/{{ service_name }}/releases/download/{{ version }}/{{ service_name }}-{{ version }}-linux-amd64.tar.gz"
 
-- name: unpack testsrv binary
-  unarchive: src=/home/testsrv/testsrv-{{ version }}-linux-amd64.tar.gz
-    dest=/home/testsrv remote_src=true
+- name: unpack {{ service_name }} binary
+  unarchive: 
+    src: "/home/{{ user_name }}/{{ service_name }}-{{ version }}-linux-amd64.tar.gz"
+    dest: "/home/{{ user_name }}" 
+    remote_src: true
 
-- name: deploy testsrv systemd unit file
-  copy:
-    src: templates/testsrv.service
-    dest: /usr/lib/systemd/system/testrsv.service
+- name: deploy {{ service_name }} systemd unit file
+  template:
+    src: "templates/testsrv.service"
+    dest: "/usr/lib/systemd/system/{{ service_name }}.service"
 
-- name: enable and start testsrv
+- name: enable and start {{ service_name }}
   systemd:
-    name: testrsv
+    name: "{{ service_name }}"
     enabled: true
     daemon_reload: yes
     state: started

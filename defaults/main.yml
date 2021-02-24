@@ -2,3 +2,6 @@
 # defaults file for testsrv-role
 
 version: v1.0.5
+service_name: testsrv
+user_name: testsrv
+group_name: testsrv
